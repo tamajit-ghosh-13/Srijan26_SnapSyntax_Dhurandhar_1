@@ -1,0 +1,2715 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="MEMORY SNAP — Snap Syntax 3.0 @ Srijan 2026, Jadavpur University. A futuristic digital memory palace for web developers."
+    />
+    <title>MEMORY SNAP · Snap Syntax 3.0 · Srijan 2026</title>
+
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='24' font-size='28'>⚡</text></svg>"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link rel="stylesheet" href="/src/css/input.css" />
+  </head>
+  <body>
+    <!--
+       CUSTOM CURSOR
+  -->
+    <div id="cursor-dot" aria-hidden="true"></div>
+    <div id="cursor-ring" aria-hidden="true"></div>
+
+    <!--
+       LOADER SCREEN
+  -->
+    <div id="loader" aria-hidden="true">
+      <div class="loader-brand">MEMORY SNAP</div>
+      <div class="loader-title text-gradient-cyber">SNAP SYNTAX 3.0</div>
+      <div class="loader-subtitle">SRIJAN 2026 · JADAVPUR UNIVERSITY</div>
+      <div class="loader-bar">
+        <div class="loader-fill"></div>
+      </div>
+      <div id="loader-status" class="loader-status-text">INITIALIZING MEMORY PALACE...</div>
+    </div>
+
+    <!-- Matrix overlay removed for a cleaner, focused aesthetic -->
+
+    <!--
+       NAVBAR
+  -->
+    <nav id="navbar" role="navigation" aria-label="Main navigation">
+      <a
+        href="#hero"
+        class="flex items-center gap-2 no-underline"
+        style="text-decoration: none"
+        aria-label="Snap Syntax home"
+      >
+        <div
+          style="
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #00f5ff, #a855f7);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: &quot;Orbitron&quot;, monospace;
+            font-weight: 900;
+            font-size: 0.8rem;
+            color: #000;
+            box-shadow: 0 0 12px rgba(0, 245, 255, 0.4);
+          "
+        >
+          SS
+        </div>
+        <span
+          style="
+            font-family: &quot;Orbitron&quot;, monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            background: linear-gradient(90deg, #00f5ff, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+          "
+        >
+          SNAP SYNTAX
+        </span>
+      </a>
+
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#memory-demo" class="nav-link">Demo</a>
+        <a href="#gallery" class="nav-link">Gallery</a>
+        <a href="#playground" class="nav-link">Playground</a>
+        <a href="#story" class="nav-link">Story</a>
+        <a href="#final-cta" class="nav-link">Deploy</a>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <div class="hidden sm:flex items-center gap-2">
+          <span
+            style="
+              font-family: &quot;JetBrains Mono&quot;, monospace;
+              font-size: 0.55rem;
+              letter-spacing: 0.15em;
+              color: rgba(232, 244, 255, 0.4);
+              text-transform: uppercase;
+            "
+          >
+            MEM
+          </span>
+          <div
+            style="
+              width: 80px;
+              height: 3px;
+              background: rgba(255, 255, 255, 0.08);
+              border-radius: 3px;
+              overflow: hidden;
+            "
+          >
+            <div class="progress-bar-fill" id="nav-progress"></div>
+          </div>
+          <span
+            id="progress-pct"
+            style="
+              font-family: &quot;JetBrains Mono&quot;, monospace;
+              font-size: 0.55rem;
+              color: #00f5ff;
+              min-width: 2rem;
+            "
+            >0%</span
+          >
+        </div>
+
+        <div class="flex gap-1" role="group" aria-label="Theme switcher">
+          <button
+            class="theme-btn active"
+            id="theme-dark"
+            data-theme="dark"
+            title="Dark mode"
+            aria-pressed="true"
+          >
+            🌑
+          </button>
+          <button
+            class="theme-btn"
+            id="theme-light"
+            data-theme="light"
+            title="Light mode"
+            aria-pressed="false"
+          >
+            ☀️
+          </button>
+          <button
+            class="theme-btn"
+            id="theme-neon"
+            data-theme="neon"
+            title="Neon mode"
+            aria-pressed="false"
+          >
+            ⚡
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!--
+       HERO SECTION
+  -->
+    <section id="hero" aria-label="Hero">
+      <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+      <div
+        aria-hidden="true"
+        style="
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          z-index: 2;
+          overflow: hidden;
+        "
+      >
+        <div
+          style="
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(
+              90deg,
+              transparent,
+              rgba(0, 245, 255, 0.4),
+              transparent
+            );
+            animation: scanLine 6s linear infinite;
+          "
+        ></div>
+      </div>
+
+      <div
+        class="grid-bg"
+        aria-hidden="true"
+        style="
+          position: absolute;
+          inset: 0;
+          z-index: 1;
+          animation: gridPulse 4s ease-in-out infinite;
+        "
+      ></div>
+
+      <div
+        class="hero-content"
+        style="max-width: 900px; width: 100%; margin: 0 auto"
+      >
+        <div
+          class="reveal"
+          style="animation-delay: 0.1s; margin-bottom: 1.5rem"
+        >
+          <span class="tag-cyber" style="margin-right: 0.5rem"
+            >SRIJAN 2026</span
+          >
+          <span
+            class="tag-cyber"
+            style="
+              background: rgba(255, 0, 170, 0.1);
+              color: #ff00aa;
+              border-color: rgba(255, 0, 170, 0.25);
+            "
+            >JADAVPUR UNIVERSITY</span
+          >
+        </div>
+
+        <div class="hero-subtitle reveal" style="animation-delay: 0.2s">
+          SNAP SYNTAX 3.0 · MEMORY EDITION
+        </div>
+
+        <div
+          class="hero-logo-3d"
+          id="hero-logo"
+          aria-label="Click to trigger snap explosion"
+        >
+          <div class="hero-logo-inner">
+            <h1 class="hero-title glitch-text" data-text="MEMORY SNAP">
+              MEMORY<br />SNAP
+            </h1>
+          </div>
+        </div>
+
+        <div
+          class="orbit-container"
+          aria-hidden="true"
+          style="position: absolute; left: 50%; top: 50%; margin-top: -1rem"
+        >
+          <div
+            style="
+              position: absolute;
+              inset: 0;
+              border: 1px dashed rgba(0, 245, 255, 0.1);
+              border-radius: 50%;
+              animation: logo3DRotate 20s linear infinite;
+            "
+          ></div>
+          <div
+            class="orbit-dot"
+            style="
+              background: #00f5ff;
+              box-shadow: 0 0 8px #00f5ff;
+              animation: spinOrbit 5s linear infinite;
+            "
+          ></div>
+          <div
+            class="orbit-dot"
+            style="
+              background: #ff00aa;
+              box-shadow: 0 0 8px #ff00aa;
+              animation: spinOrbit 5s linear infinite 1.67s;
+            "
+          ></div>
+          <div
+            class="orbit-dot"
+            style="
+              background: #a855f7;
+              box-shadow: 0 0 8px #a855f7;
+              animation: spinOrbit 5s linear infinite 3.34s;
+            "
+          ></div>
+        </div>
+
+        <div
+          class="typewriter-text reveal"
+          style="
+            animation-delay: 0.4s;
+            margin-top: 1.5rem;
+            margin-bottom: 2.5rem;
+          "
+        >
+          <span id="typewriter-output"></span>
+          <span class="typewriter-cursor" aria-hidden="true"></span>
+        </div>
+
+        <div
+          class="flex flex-col sm:flex-row gap-4 justify-center items-center reveal"
+          style="animation-delay: 0.6s"
+        >
+          <button
+            class="btn-cta"
+            id="enter-palace-btn"
+            aria-label="Enter the Memory Palace"
+          >
+            <span>⚡ Enter the Memory Palace</span>
+          </button>
+          <a href="#gallery" class="btn-ghost"> View Gallery → </a>
+        </div>
+
+        <div
+          class="flex justify-center gap-8 mt-12 reveal"
+          style="animation-delay: 0.8s"
+        >
+          <div style="text-align: center">
+            <div
+              style="
+                font-family: &quot;Orbitron&quot;, monospace;
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: #00f5ff;
+              "
+            >
+              3000+
+            </div>
+            <div
+              style="
+                font-family: &quot;JetBrains Mono&quot;, monospace;
+                font-size: 0.6rem;
+                color: rgba(232, 244, 255, 0.4);
+                letter-spacing: 0.15em;
+                text-transform: uppercase;
+              "
+            >
+              Particles
+            </div>
+          </div>
+          <div style="width: 1px; background: rgba(255, 255, 255, 0.08)"></div>
+          <div style="text-align: center">
+            <div
+              style="
+                font-family: &quot;Orbitron&quot;, monospace;
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: #a855f7;
+              "
+            >
+              60fps
+            </div>
+            <div
+              style="
+                font-family: &quot;JetBrains Mono&quot;, monospace;
+                font-size: 0.6rem;
+                color: rgba(232, 244, 255, 0.4);
+                letter-spacing: 0.15em;
+                text-transform: uppercase;
+              "
+            >
+              Buttery
+            </div>
+          </div>
+          <div style="width: 1px; background: rgba(255, 255, 255, 0.08)"></div>
+          <div style="text-align: center">
+            <div
+              style="
+                font-family: &quot;Orbitron&quot;, monospace;
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: #ff00aa;
+              "
+            >
+              ∞
+            </div>
+            <div
+              style="
+                font-family: &quot;JetBrains Mono&quot;, monospace;
+                font-size: 0.6rem;
+                color: rgba(232, 244, 255, 0.4);
+                letter-spacing: 0.15em;
+                text-transform: uppercase;
+              "
+            >
+              Memory
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        aria-hidden="true"
+        style="
+          position: absolute;
+          bottom: 2rem;
+          left: 50%;
+          transform: translateX(-50%);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.5rem;
+          animation: floatAlt 3s ease-in-out infinite;
+        "
+      >
+        <span
+          style="
+            font-family: &quot;JetBrains Mono&quot;, monospace;
+            font-size: 0.55rem;
+            letter-spacing: 0.3em;
+            color: rgba(232, 244, 255, 0.3);
+            text-transform: uppercase;
+          "
+          >Scroll</span
+        >
+        <div
+          style="
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, #00f5ff, transparent);
+          "
+        ></div>
+      </div>
+    </section>
+
+    <!--
+       MEMORY DEMO — THE SHOWSTOPPER
+  -->
+    <section id="memory-demo" aria-label="Interactive Memory Demo">
+      <div style="max-width: 1200px; margin: 0 auto">
+        <div class="text-center reveal" style="margin-bottom: 3rem">
+          <div class="section-label" style="margin-bottom: 0.75rem">
+            INTERACTIVE DEMO
+          </div>
+          <h2
+            style="
+              font-family: &quot;Orbitron&quot;, monospace;
+              font-size: clamp(1.8rem, 5vw, 3.5rem);
+              font-weight: 700;
+              line-height: 1.1;
+            "
+            class="text-gradient-cyber"
+          >
+            Test Your Memory
+          </h2>
+          <p
+            style="
+              font-family: &quot;Rajdhani&quot;, sans-serif;
+              font-size: 1.1rem;
+              color: rgba(232, 244, 255, 0.5);
+              margin-top: 1rem;
+              max-width: 500px;
+              margin-inline: auto;
+            "
+          >
+            Study the original design. Recreate it from memory. Achieve 95%+ for
+            a PERFECT SNAP.
+          </p>
+        </div>
+
+        <div
+          class="reveal"
+          style="max-width: 600px; margin: 0 auto 2.5rem; text-align: center"
+        >
+          <div
+            class="flex justify-between mb-2"
+            style="
+              font-family: &quot;JetBrains Mono&quot;, monospace;
+              font-size: 0.7rem;
+            "
+          >
+            <span style="color: rgba(232, 244, 255, 0.4)">SYNTAX ACCURACY</span>
+            <span id="accuracy-display" style="color: #00f5ff; font-weight: 700"
+              >0%</span
+            >
+          </div>
+          <div class="accuracy-bar-container">
+            <div
+              id="accuracy-bar"
+              class="accuracy-fill"
+              style="width: 0%; height: 100%; border-radius: 8px"
+            ></div>
+          </div>
+          <div
+            id="accuracy-label"
+            style="
+              font-family: &quot;JetBrains Mono&quot;, monospace;
+              font-size: 0.6rem;
+              color: rgba(232, 244, 255, 0.3);
+              margin-top: 0.5rem;
+              letter-spacing: 0.15em;
+            "
+          >
+            AWAITING RECONSTRUCTION...
+          </div>
+        </div>
+
+        <div id="study-phase">
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+              gap: 1.5rem;
+              margin-bottom: 2rem;
+            "
+          >
+            <div
+              class="glass-card reveal-left"
+              style="padding: 0; overflow: hidden"
+            >
+              <div
+                style="
+                  padding: 0.75rem 1rem;
+                  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                  display: flex;
+                  align-items: center;
+                  justify-content: between;
+                  gap: 0.5rem;
+                "
+              >
+                <div style="display: flex; gap: 0.4rem">
+                  <div
+                    style="
+                      width: 10px;
+                      height: 10px;
+                      border-radius: 50%;
+                      background: #ff5f57;
+                    "
+                  ></div>
+                  <div
+                    style="
+                      width: 10px;
+                      height: 10px;
+                      border-radius: 50%;
+                      background: #ffbd2e;
+                    "
+                  ></div>
+                  <div
+                    style="
+                      width: 10px;
+                      height: 10px;
+                      border-radius: 50%;
+                      background: #28ca41;
+                    "
+                  ></div>
+                </div>
+                <span
+                  style="
+                    font-family: &quot;JetBrains Mono&quot;, monospace;
+                    font-size: 0.6rem;
+                    color: rgba(232, 244, 255, 0.3);
+                    flex: 1;
+                    text-align: center;
+                  "
+                  >original-design.html</span
+                >
+                <span class="tag-cyber" style="font-size: 0.55rem"
+                  >ORIGINAL</span
+                >
+              </div>
+              <div
+                id="original-design"
+                style="
+                  padding: 1.5rem;
+                  background: linear-gradient(135deg, #0d0d2b 0%, #1a0a2e 100%);
+                "
+              >
+                <div
+                  style="
+                    background: linear-gradient(135deg, #1e3a5f, #0f2040);
+                    border-radius: 12px;
+                    padding: 1.5rem;
+                    border: 1px solid rgba(100, 180, 255, 0.2);
+                    margin-bottom: 1rem;
+                  "
+                >
+                  <div
+                    style="
+                      display: flex;
+                      align-items: center;
+                      gap: 0.75rem;
+                      margin-bottom: 1rem;
+                    "
+                  >
+                    <div
+                      style="
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 10px;
+                        background: linear-gradient(135deg, #60a5fa, #3b82f6);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 1.2rem;
+                      "
+                    >
+                      💎
+                    </div>
+                    <div>
+                      <div
+                        style="
+                          font-family: &quot;Orbitron&quot;, monospace;
+                          font-size: 0.75rem;
+                          font-weight: 700;
+                          color: #93c5fd;
+                        "
+                      >
+                        PREMIUM CARD
+                      </div>
+                      <div
+                        style="
+                          font-size: 0.6rem;
+                          color: rgba(147, 197, 253, 0.5);
+                          font-family: &quot;JetBrains Mono&quot;, monospace;
+                        "
+                      >
+                        COMPONENT·v2
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      font-family: &quot;Rajdhani&quot;, sans-serif;
+                      font-size: 0.9rem;
+                      color: rgba(255, 255, 255, 0.8);
+                      line-height: 1.5;
+                      margin-bottom: 1rem;
+                    "
+                  >
+                    A sleek glassmorphic card with a gradient background,
+                    rounded icon, and layered typography.
+                  </div>
+                  <div style="display: flex; gap: 0.5rem">
+                    <span
+                      style="
+                        font-size: 0.6rem;
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 20px;
+                        background: rgba(96, 165, 250, 0.15);
+                        color: #60a5fa;
+                        border: 1px solid rgba(96, 165, 250, 0.3);
+                      "
+                      >Tailwind</span
+                    >
+                    <span
+                      style="
+                        font-size: 0.6rem;
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 20px;
+                        background: rgba(167, 139, 250, 0.15);
+                        color: #a78bfa;
+                        border: 1px solid rgba(167, 139, 250, 0.3);
+                      "
+                      >CSS</span
+                    >
+                    <span
+                      style="
+                        font-size: 0.6rem;
+                        padding: 0.2rem 0.6rem;
+                        border-radius: 20px;
+                        background: rgba(52, 211, 153, 0.15);
+                        color: #34d399;
+                        border: 1px solid rgba(52, 211, 153, 0.3);
+                      "
+                      >JS</span
+                    >
+                  </div>
+                </div>
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr;
+                    gap: 0.5rem;
+                  "
+                >
+                  <div
+                    style="
+                      background: rgba(255, 255, 255, 0.04);
+                      border-radius: 8px;
+                      padding: 0.75rem;
+                      text-align: center;
+                      border: 1px solid rgba(255, 255, 255, 0.06);
+                    "
+                  >
+                    <div
+                      style="
+                        font-family: &quot;Orbitron&quot;, monospace;
+                        font-size: 1rem;
+                        font-weight: 700;
+                        color: #60a5fa;
+                      "
+                    >
+                      98%
+                    </div>
+                    <div
+                      style="
+                        font-size: 0.55rem;
+                        color: rgba(255, 255, 255, 0.3);
+                        font-family: &quot;JetBrains Mono&quot;, monospace;
+                      "
+                    >
+                      SCORE
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      background: rgba(255, 255, 255, 0.04);
+                      border-radius: 8px;
+                      padding: 0.75rem;
+                      text-align: center;
+                      border: 1px solid rgba(255, 255, 255, 0.06);
+                    "
+                  >
+                    <div
+                      style="
+                        font-family: &quot;Orbitron&quot;, monospace;
+                        font-size: 1rem;
+                        font-weight: 700;
+                        color: #a78bfa;
+                      "
+                    >
+                      12s
+                    </div>
+                    <div
+                      style="
+                        font-size: 0.55rem;
+                        color: rgba(255, 255, 255, 0.3);
+                        font-family: &quot;JetBrains Mono&quot;, monospace;
+                      "
+                    >
+                      BUILD
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      background: rgba(255, 255, 255, 0.04);
+                      border-radius: 8px;
+                      padding: 0.75rem;
+                      text-align: center;
+                      border: 1px solid rgba(255, 255, 255, 0.06);
+                    "
+                  >
+                    <div
+                      style="
+                        font-family: &quot;Orbitron&quot;, monospace;
+                        font-size: 1rem;
+                        font-weight: 700;
+                        color: #34d399;
+                      "
+                    >
+                      A+
+                    </div>
+                    <div
+                      style="
+                        font-size: 0.55rem;
+                        color: rgba(255, 255, 255, 0.3);
+                        font-family: &quot;JetBrains Mono&quot;, monospace;
+                      "
+                    >
+                      GRADE
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="glass-card reveal-right"
+              style="padding: 0; overflow: hidden"
+            >
+              <div
+                style="
+                  padding: 0.75rem 1rem;
+                  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                  display: flex;
+                  align-items: center;
+                  gap: 0.5rem;
+                "
+              >
+                <div style="display: flex; gap: 0.4rem">
+                  <div
+                    style="
+                      width: 10px;
+                      height: 10px;
+                      border-radius: 50%;
+                      background: #ff5f57;
+                    "
+                  ></div>
+                  <div
+                    style="
+                      width: 10px;
+                      height: 10px;
+                      border-radius: 50%;
+                      background: #ffbd2e;
+                    "
+                  ></div>
+                  <div
+                    style="
+                      width: 10px;
+                      height: 10px;
+                      border-radius: 50%;
+                      background: #28ca41;
+                    "
+                  ></div>
+                </div>
+                <span
+                  style="
+                    font-family: &quot;JetBrains Mono&quot;, monospace;
+                    font-size: 0.6rem;
+                    color: rgba(232, 244, 255, 0.3);
+                    flex: 1;
+                    text-align: center;
+                  "
+                  >your-recreation.html</span
+                >
+                <span
+                  class="tag-cyber"
+                  style="
+                    font-size: 0.55rem;
+                    background: rgba(255, 0, 170, 0.1);
+                    color: #ff00aa;
+                    border-color: rgba(255, 0, 170, 0.25);
+                  "
+                  >YOURS</span
+                >
+              </div>
+              <div
+                id="recreation-canvas"
+                style="padding: 1.5rem; min-height: 240px; position: relative"
+              >
+                <div
+                  id="recreation-placeholder"
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    height: 200px;
+                    border: 2px dashed rgba(0, 245, 255, 0.15);
+                    border-radius: 12px;
+                    gap: 1rem;
+                  "
+                >
+                  <div style="font-size: 2rem; opacity: 0.3">🧩</div>
+                  <div
+                    style="
+                      font-family: &quot;JetBrains Mono&quot;, monospace;
+                      font-size: 0.65rem;
+                      color: rgba(232, 244, 255, 0.3);
+                      text-align: center;
+                      letter-spacing: 0.1em;
+                    "
+                  >
+                    Drag components here<br />to rebuild the design
+                  </div>
+                </div>
+                <div
+                  id="drop-zone"
+                  style="
+                    display: none;
+                    position: absolute;
+                    inset: 1.5rem;
+                    border: 2px dashed rgba(0, 245, 255, 0.3);
+                    border-radius: 12px;
+                    background: rgba(0, 245, 255, 0.02);
+                  "
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="glass-card reveal"
+            style="padding: 1.5rem; margin-bottom: 2rem"
+          >
+            <div
+              style="
+                font-family: &quot;JetBrains Mono&quot;, monospace;
+                font-size: 0.65rem;
+                color: rgba(232, 244, 255, 0.4);
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                margin-bottom: 1rem;
+              "
+            >
+              📦 Component Toolbox — Drag to Recreate
+            </div>
+            <div
+              id="toolbox"
+              style="display: flex; flex-wrap: wrap; gap: 0.75rem"
+            >
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-3 justify-center reveal">
+            <button id="test-memory-btn" class="btn-cta">
+              <span>🧠 Test My Memory</span>
+            </button>
+            <button id="reset-demo-btn" class="btn-ghost">↺ Reset</button>
+            <button
+              id="reveal-answer-btn"
+              class="btn-ghost"
+              style="border-color: #a855f7; color: #a855f7"
+            >
+              💡 Reveal Answer
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--
+       PROJECT GALLERY
+  -->
+    <section id="gallery" aria-label="Project Gallery">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 6rem 2rem">
+        <div class="text-center reveal" style="margin-bottom: 3rem">
+          <div class="section-label" style="margin-bottom: 0.75rem">
+            GALLERY
+          </div>
+          <h2
+            style="
+              font-family: &quot;Orbitron&quot;, monospace;
+              font-size: clamp(1.8rem, 5vw, 3.5rem);
+              font-weight: 700;
+            "
+            class="text-gradient-cyber"
+          >
+            Snapped Projects
+          </h2>
+          <p
+            style="
+              color: rgba(232, 244, 255, 0.5);
+              margin-top: 1rem;
+              font-size: 1.05rem;
+              max-width: 480px;
+              margin-inline: auto;
+            "
+          >
+            Ultra-premium designs, instantly snapped into perfect syntax.
+          </p>
+        </div>
+
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+          "
+        >
+          <article
+            class="project-card glass-card morph-card reveal-left"
+            style="animation-delay: 0.1s"
+          >
+            <div
+              class="project-preview"
+              style="
+                background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+              "
+            >
+              <div
+                style="
+                  padding: 1.5rem;
+                  height: 100%;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: space-between;
+                "
+              >
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                  "
+                >
+                  <div
+                    style="
+                      font-family: &quot;Orbitron&quot;, monospace;
+                      font-size: 0.7rem;
+                      font-weight: 700;
+                      color: #a855f7;
+                    "
+                  >
+                    NEURAL DASH
+                  </div>
+                  <div style="display: flex; gap: 0.4rem">
+                    <div
+                      style="
+                        width: 6px;
+                        height: 6px;
+                        border-radius: 50%;
+                        background: #00ff88;
+                        box-shadow: 0 0 4px #00ff88;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        font-family: &quot;JetBrains Mono&quot;, monospace;
+                        font-size: 0.55rem;
+                        color: #00ff88;
+                      "
+                    >
+                      LIVE
+                    </div>
+                  </div>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    align-items: flex-end;
+                    gap: 3px;
+                    height: 60px;
+                  "
+                >
+                  <div
+                    style="
+                      flex: 1;
+                      background: linear-gradient(to top, #a855f7, transparent);
+                      border-radius: 2px;
+                      height: 40%;
+                    "
+                  ></div>
+                  <div
+                    style="
+                      flex: 1;
+                      background: linear-gradient(to top, #a855f7, transparent);
+                      border-radius: 2px;
+                      height: 65%;
+                    "
+                  ></div>
+                  <div
+                    style="
+                      flex: 1;
+                      background: linear-gradient(to top, #a855f7, transparent);
+                      border-radius: 2px;
+                      height: 30%;
+                    "
+                  ></div>
+                  <div
+                    style="
+                      flex: 1;
+                      background: linear-gradient(to top, #00f5ff, transparent);
+                      border-radius: 2px;
+                      height: 85%;
+                      animation: pulseGlow 2s ease-in-out infinite;
+                    "
+                  ></div>
+                  <div
+                    style="
+                      flex: 1;
+                      background: linear-gradient(to top, #a855f7, transparent);
+                      border-radius: 2px;
+                      height: 55%;
+                    "
+                  ></div>
+                  <div
+                    style="
+                      flex: 1;
+                      background: linear-gradient(to top, #a855f7, transparent);
+                      border-radius: 2px;
+                      height: 70%;
+                    "
+                  ></div>
+                  <div
+                    style="
+                      flex: 1;
+                      background: linear-gradient(to top, #00f5ff, transparent);
+                      border-radius: 2px;
+                      height: 90%;
+                    "
+                  ></div>
+                  <div
+                    style="
+                      flex: 1;
+                      background: linear-gradient(to top, #a855f7, transparent);
+                      border-radius: 2px;
+                      height: 45%;
+                    "
+                  ></div>
+                </div>
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 0.5rem;
+                  "
+                >
+                  <div
+                    style="
+                      background: rgba(168, 85, 247, 0.1);
+                      border: 1px solid rgba(168, 85, 247, 0.2);
+                      border-radius: 6px;
+                      padding: 0.4rem 0.6rem;
+                    "
+                  >
+                    <div
+                      style="
+                        font-family: &quot;Orbitron&quot;, monospace;
+                        font-size: 0.8rem;
+                        color: #a855f7;
+                        font-weight: 700;
+                      "
+                    >
+                      1.2M
+                    </div>
+                    <div
+                      style="
+                        font-size: 0.5rem;
+                        color: rgba(255, 255, 255, 0.3);
+                        font-family: &quot;JetBrains Mono&quot;, monospace;
+                      "
+                    >
+                      NEURONS
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      background: rgba(0, 245, 255, 0.1);
+                      border: 1px solid rgba(0, 245, 255, 0.2);
+                      border-radius: 6px;
+                      padding: 0.4rem 0.6rem;
+                    "
+                  >
+                    <div
+                      style="
+                        font-family: &quot;Orbitron&quot;, monospace;
+                        font-size: 0.8rem;
+                        color: #00f5ff;
+                        font-weight: 700;
+                      "
+                    >
+                      98.7%
+                    </div>
+                    <div
+                      style="
+                        font-size: 0.5rem;
+                        color: rgba(255, 255, 255, 0.3);
+                        font-family: &quot;JetBrains Mono&quot;, monospace;
+                      "
+                    >
+                      ACC
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="code-highlight-float"
+                style="top: 10px; right: -5px; animation-delay: -2s"
+              >
+                bg-violet-900/30
+              </div>
+            </div>
+            <div style="padding: 1.5rem">
+              <div class="flex gap-2 mb-3">
+                <span class="tag-cyber">Dashboard</span>
+                <span
+                  class="tag-cyber"
+                  style="
+                    background: rgba(168, 85, 247, 0.1);
+                    color: #a855f7;
+                    border-color: rgba(168, 85, 247, 0.25);
+                  "
+                  >AI/ML</span
+                >
+              </div>
+              <h3
+                style="
+                  font-family: &quot;Orbitron&quot;, monospace;
+                  font-size: 1.1rem;
+                  font-weight: 700;
+                  margin-bottom: 0.5rem;
+                "
+              >
+                NeuralDash
+              </h3>
+              <p
+                style="
+                  font-size: 0.85rem;
+                  color: rgba(232, 244, 255, 0.5);
+                  line-height: 1.5;
+                  margin-bottom: 1rem;
+                "
+              >
+                Real-time AI analytics dashboard with live neural network
+                visualization and gradient glassmorphic cards.
+              </p>
+              <div
+                style="
+                  display: flex;
+                  gap: 0.5rem;
+                  flex-wrap: wrap;
+                  margin-bottom: 1rem;
+                "
+              >
+                <span
+                  style="
+                    font-family: &quot;JetBrains Mono&quot;, monospace;
+                    font-size: 0.6rem;
+                    color: rgba(232, 244, 255, 0.3);
+                  "
+                  >grid · backdrop-blur · gradient</span
+                >
+              </div>
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                "
+              >
+                <div
+                  style="
+                    font-family: &quot;Orbitron&quot;, monospace;
+                    font-size: 0.75rem;
+                    color: #00ff88;
+                  "
+                >
+                  SNAP SCORE: 97%
+                </div>
+                <button
+                  class="btn-ghost"
+                  style="padding: 0.4rem 0.9rem; font-size: 0.65rem"
+                  onclick="triggerSnapTransition(this)"
+                >
+                  View Syntax →
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <article
+            class="project-card glass-card morph-card reveal"
+            style="animation-delay: 0.2s"
+          >
+            <div
+              class="project-preview"
+              style="
+                background: linear-gradient(135deg, #0d1117, #1a1a2e, #16213e);
+              "
+            >
+              <div
+                style="
+                  padding: 1.5rem;
+                  height: 100%;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 0.75rem;
+                "
+              >
+                <div
+                  style="
+                    font-family: &quot;Orbitron&quot;, monospace;
+                    font-size: 0.7rem;
+                    font-weight: 700;
+                    color: #00f5ff;
+                  "
+                >
+                  PHOTON GRID
+                </div>
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 2fr 1fr;
+                    grid-template-rows: 1fr 1fr;
+                    gap: 4px;
+                    flex: 1;
+                  "
+                >
+                  <div
+                    style="
+                      grid-row: span 2;
+                      background: linear-gradient(135deg, #1a3a5c, #0d2035);
+                      border-radius: 6px;
+                      position: relative;
+                      overflow: hidden;
+                    "
+                  >
+                    <div
+                      style="
+                        position: absolute;
+                        inset: 0;
+                        background: linear-gradient(
+                          135deg,
+                          rgba(0, 245, 255, 0.1),
+                          transparent
+                        );
+                      "
+                    ></div>
+                    <div
+                      style="
+                        position: absolute;
+                        bottom: 0.5rem;
+                        left: 0.5rem;
+                        font-family: &quot;JetBrains Mono&quot;, monospace;
+                        font-size: 0.55rem;
+                        color: rgba(255, 255, 255, 0.5);
+                      "
+                    >
+                      Hero.jpg
+                    </div>
+                  </div>
+                  <div
+                    style="
+                      background: linear-gradient(135deg, #2d1b69, #1a0f40);
+                      border-radius: 6px;
+                    "
+                  ></div>
+                  <div
+                    style="
+                      background: linear-gradient(135deg, #1f3a1f, #0d2010);
+                      border-radius: 6px;
+                    "
+                  ></div>
+                </div>
+                <div style="display: flex; gap: 0.5rem">
+                  <div
+                    style="
+                      flex: 1;
+                      background: rgba(0, 245, 255, 0.08);
+                      border-radius: 4px;
+                      padding: 0.3rem 0.5rem;
+                      display: flex;
+                      align-items: center;
+                      gap: 0.3rem;
+                    "
+                  >
+                    <div
+                      style="
+                        width: 6px;
+                        height: 6px;
+                        border-radius: 50%;
+                        background: #00f5ff;
+                      "
+                    ></div>
+                    <span
+                      style="
+                        font-family: &quot;JetBrains Mono&quot;, monospace;
+                        font-size: 0.55rem;
+                        color: #00f5ff;
+                      "
+                      >object-cover</span
+                    >
+                  </div>
+                  <div
+                    style="
+                      background: rgba(255, 255, 255, 0.04);
+                      border-radius: 4px;
+                      padding: 0.3rem 0.5rem;
+                    "
+                  >
+                    <span
+                      style="
+                        font-family: &quot;JetBrains Mono&quot;, monospace;
+                        font-size: 0.55rem;
+                        color: rgba(255, 255, 255, 0.3);
+                      "
+                      >aspect-video</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <div
+                class="code-highlight-float"
+                style="bottom: 10px; left: -5px; animation-delay: -4s"
+              >
+                grid-cols-[2fr_1fr]
+              </div>
+            </div>
+            <div style="padding: 1.5rem">
+              <div class="flex gap-2 mb-3">
+                <span class="tag-cyber">Gallery</span>
+                <span
+                  class="tag-cyber"
+                  style="
+                    background: rgba(0, 255, 136, 0.1);
+                    color: #00ff88;
+                    border-color: rgba(0, 255, 136, 0.25);
+                  "
+                  >Grid</span
+                >
+              </div>
+              <h3
+                style="
+                  font-family: &quot;Orbitron&quot;, monospace;
+                  font-size: 1.1rem;
+                  font-weight: 700;
+                  margin-bottom: 0.5rem;
+                "
+              >
+                PhotonGrid
+              </h3>
+              <p
+                style="
+                  font-size: 0.85rem;
+                  color: rgba(232, 244, 255, 0.5);
+                  line-height: 1.5;
+                  margin-bottom: 1rem;
+                "
+              >
+                Masonry-style image gallery with CSS Grid subgrid, hover zoom,
+                and lightbox snap transitions.
+              </p>
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                "
+              >
+                <div
+                  style="
+                    font-family: &quot;Orbitron&quot;, monospace;
+                    font-size: 0.75rem;
+                    color: #00ff88;
+                  "
+                >
+                  SNAP SCORE: 94%
+                </div>
+                <button
+                  class="btn-ghost"
+                  style="padding: 0.4rem 0.9rem; font-size: 0.65rem"
+                  onclick="triggerSnapTransition(this)"
+                >
+                  View Syntax →
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <article
+            class="project-card glass-card morph-card reveal-right"
+            style="animation-delay: 0.3s"
+          >
+            <div
+              class="project-preview"
+              style="
+                background: linear-gradient(135deg, #0a0a0a, #1a0a0a, #2d0505);
+              "
+            >
+              <div
+                style="
+                  padding: 1.5rem;
+                  height: 100%;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 0.75rem;
+                "
+              >
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 0.4rem 0.75rem;
+                    background: rgba(255, 34, 68, 0.1);
+                    border-radius: 6px;
+                    border: 1px solid rgba(255, 34, 68, 0.2);
+                  "
+                >
+                  <span
+                    style="
+                      font-family: &quot;Orbitron&quot;, monospace;
+                      font-size: 0.6rem;
+                      color: #ff2244;
+                      font-weight: 700;
+                    "
+                    >VAULT OS</span
+                  >
+                  <div style="display: flex; gap: 0.3rem">
+                    <div
+                      style="
+                        width: 8px;
+                        height: 8px;
+                        border-radius: 50%;
+                        background: #ff2244;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        width: 8px;
+                        height: 8px;
+                        border-radius: 50%;
+                        background: rgba(255, 34, 68, 0.3);
+                      "
+                    ></div>
+                    <div
+                      style="
+                        width: 8px;
+                        height: 8px;
+                        border-radius: 50%;
+                        background: rgba(255, 34, 68, 0.1);
+                      "
+                    ></div>
+                  </div>
+                </div>
+                <div
+                  style="
+                    flex: 1;
+                    background: rgba(0, 0, 0, 0.5);
+                    border-radius: 6px;
+                    padding: 0.75rem;
+                    font-family: &quot;JetBrains Mono&quot;, monospace;
+                    font-size: 0.6rem;
+                    line-height: 1.8;
+                    overflow: hidden;
+                  "
+                >
+                  <div style="color: #ff2244">
+                    $ vault init --project memory-snap
+                  </div>
+                  <div style="color: #00ff88">✓ Memory palace initialized</div>
+                  <div style="color: #ffaa00">⚡ Linking 3000 particles...</div>
+                  <div style="color: rgba(255, 255, 255, 0.4)">
+                    → Compiling syntax engine
+                  </div>
+                  <div style="color: #00f5ff">✦ SNAP SYNTAX v3.0 ready</div>
+                  <div style="color: rgba(255, 255, 255, 0.2)">
+                    _<span
+                      style="animation: typewriterBlink 1s step-end infinite"
+                      >|</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <div
+                class="code-highlight-float"
+                style="top: 8px; right: 10px; animation-delay: -1s"
+              >
+                font-mono · text-red
+              </div>
+            </div>
+            <div style="padding: 1.5rem">
+              <div class="flex gap-2 mb-3">
+                <span class="tag-cyber">Terminal</span>
+                <span
+                  class="tag-cyber"
+                  style="
+                    background: rgba(255, 34, 68, 0.1);
+                    color: #ff2244;
+                    border-color: rgba(255, 34, 68, 0.25);
+                  "
+                  >OS UI</span
+                >
+              </div>
+              <h3
+                style="
+                  font-family: &quot;Orbitron&quot;, monospace;
+                  font-size: 1.1rem;
+                  font-weight: 700;
+                  margin-bottom: 0.5rem;
+                "
+              >
+                VaultOS
+              </h3>
+              <p
+                style="
+                  font-size: 0.85rem;
+                  color: rgba(232, 244, 255, 0.5);
+                  line-height: 1.5;
+                  margin-bottom: 1rem;
+                "
+              >
+                Dark OS-inspired terminal interface with animated text output,
+                custom scrollbars, and red-accent cyber aesthetics.
+              </p>
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                "
+              >
+                <div
+                  style="
+                    font-family: &quot;Orbitron&quot;, monospace;
+                    font-size: 0.75rem;
+                    color: #00ff88;
+                  "
+                >
+                  SNAP SCORE: 99%
+                </div>
+                <button
+                  class="btn-ghost"
+                  style="
+                    padding: 0.4rem 0.9rem;
+                    font-size: 0.65rem;
+                    border-color: #ff2244;
+                    color: #ff2244;
+                  "
+                  onclick="triggerSnapTransition(this)"
+                >
+                  View Syntax →
+                </button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <hr class="neon-divider" style="margin: 0 2rem" aria-hidden="true" />
+
+    <!--
+       LIVE CODE PLAYGROUND
+  -->
+    <section id="playground" aria-label="Live Code Playground">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 6rem 2rem">
+        <div class="text-center reveal" style="margin-bottom: 3rem">
+          <div class="section-label" style="margin-bottom: 0.75rem">
+            PLAYGROUND
+          </div>
+          <h2
+            style="
+              font-family: &quot;Orbitron&quot;, monospace;
+              font-size: clamp(1.8rem, 5vw, 3.5rem);
+              font-weight: 700;
+            "
+            class="text-gradient-cyber"
+          >
+            Live Tailwind Lab
+          </h2>
+          <p
+            style="
+              color: rgba(232, 244, 255, 0.5);
+              margin-top: 1rem;
+              font-size: 1.05rem;
+              max-width: 500px;
+              margin-inline: auto;
+            "
+          >
+            Type Tailwind classes, watch the preview update in real-time.
+          </p>
+        </div>
+
+        <div class="flex gap-2 mb-4 reveal" style="flex-wrap: wrap">
+          <button
+            class="playground-tab active-tab"
+            data-preset="card"
+            style="
+              font-family: &quot;JetBrains Mono&quot;, monospace;
+              font-size: 0.65rem;
+              padding: 0.4rem 0.9rem;
+              border-radius: 6px;
+              border: 1px solid rgba(0, 245, 255, 0.2);
+              color: #00f5ff;
+              background: rgba(0, 245, 255, 0.08);
+              cursor: none;
+              transition: all 0.2s ease;
+              letter-spacing: 0.1em;
+            "
+          >
+            Card
+          </button>
+          <button
+            class="playground-tab"
+            data-preset="button"
+            style="
+              font-family: &quot;JetBrains Mono&quot;, monospace;
+              font-size: 0.65rem;
+              padding: 0.4rem 0.9rem;
+              border-radius: 6px;
+              border: 1px solid rgba(255, 255, 255, 0.1);
+              color: rgba(232, 244, 255, 0.4);
+              background: transparent;
+              cursor: none;
+              transition: all 0.2s ease;
+              letter-spacing: 0.1em;
+            "
+          >
+            Button
+          </button>
+          <button
+            class="playground-tab"
+            data-preset="navbar"
+            style="
+              font-family: &quot;JetBrains Mono&quot;, monospace;
+              font-size: 0.65rem;
+              padding: 0.4rem 0.9rem;
+              border-radius: 6px;
+              border: 1px solid rgba(255, 255, 255, 0.1);
+              color: rgba(232, 244, 255, 0.4);
+              background: transparent;
+              cursor: none;
+              transition: all 0.2s ease;
+              letter-spacing: 0.1em;
+            "
+          >
+            Navbar
+          </button>
+          <button
+            class="playground-tab"
+            data-preset="badge"
+            style="
+              font-family: &quot;JetBrains Mono&quot;, monospace;
+              font-size: 0.65rem;
+              padding: 0.4rem 0.9rem;
+              border-radius: 6px;
+              border: 1px solid rgba(255, 255, 255, 0.1);
+              color: rgba(232, 244, 255, 0.4);
+              background: transparent;
+              cursor: none;
+              transition: all 0.2s ease;
+              letter-spacing: 0.1em;
+            "
+          >
+            Badge
+          </button>
+          <button
+            class="playground-tab"
+            data-preset="custom"
+            style="
+              font-family: &quot;JetBrains Mono&quot;, monospace;
+              font-size: 0.65rem;
+              padding: 0.4rem 0.9rem;
+              border-radius: 6px;
+              border: 1px solid rgba(255, 255, 255, 0.1);
+              color: rgba(232, 244, 255, 0.4);
+              background: transparent;
+              cursor: none;
+              transition: all 0.2s ease;
+              letter-spacing: 0.1em;
+            "
+          >
+            + Custom
+          </button>
+        </div>
+
+        <div
+          style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem"
+          class="reveal"
+        >
+          <div class="editor-wrapper" style="background: rgba(2, 4, 8, 0.9)">
+            <div class="editor-toolbar">
+              <div class="editor-dot" style="background: #ff5f57"></div>
+              <div class="editor-dot" style="background: #ffbd2e"></div>
+              <div class="editor-dot" style="background: #28ca41"></div>
+              <span
+                style="
+                  font-family: &quot;JetBrains Mono&quot;, monospace;
+                  font-size: 0.6rem;
+                  color: rgba(255, 255, 255, 0.2);
+                  margin-left: 0.5rem;
+                "
+                >tailwind-playground.html</span
+              >
+              <div style="margin-left: auto; display: flex; gap: 0.5rem">
+                <button
+                  id="copy-code-btn"
+                  style="
+                    font-family: &quot;JetBrains Mono&quot;, monospace;
+                    font-size: 0.55rem;
+                    padding: 0.2rem 0.5rem;
+                    border: 1px solid rgba(0, 245, 255, 0.2);
+                    border-radius: 4px;
+                    color: #00f5ff;
+                    background: transparent;
+                    cursor: none;
+                    transition: all 0.2s ease;
+                  "
+                  title="Copy code"
+                >
+                  📋 Copy
+                </button>
+                <button
+                  id="format-code-btn"
+                  style="
+                    font-family: &quot;JetBrains Mono&quot;, monospace;
+                    font-size: 0.55rem;
+                    padding: 0.2rem 0.5rem;
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border-radius: 4px;
+                    color: rgba(255, 255, 255, 0.4);
+                    background: transparent;
+                    cursor: none;
+                    transition: all 0.2s ease;
+                  "
+                  title="Format"
+                >
+                  ✦ Format
+                </button>
+              </div>
+            </div>
+            <div style="display: flex; max-height: 360px; overflow: auto">
+              <div
+                id="line-numbers"
+                style="
+                  padding: 1.5rem 0 1.5rem 1rem;
+                  background: rgba(0, 0, 0, 0.2);
+                  border-right: 1px solid rgba(255, 255, 255, 0.04);
+                  user-select: none;
+                "
+              ></div>
+              <textarea
+                id="code-editor"
+                spellcheck="false"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                aria-label="HTML code editor"
+              ></textarea>
+            </div>
+            <div
+              style="
+                padding: 0.5rem 1rem;
+                border-top: 1px solid rgba(255, 255, 255, 0.04);
+                display: flex;
+                gap: 0.5rem;
+                flex-wrap: wrap;
+              "
+              id="token-hints"
+            >
+            </div>
+          </div>
+
+          <div
+            style="
+              border-radius: 12px;
+              overflow: hidden;
+              border: 1px solid rgba(255, 255, 255, 0.06);
+            "
+          >
+            <div class="editor-toolbar">
+              <div class="editor-dot" style="background: #ff5f57"></div>
+              <div class="editor-dot" style="background: #ffbd2e"></div>
+              <div class="editor-dot" style="background: #28ca41"></div>
+              <span
+                style="
+                  font-family: &quot;JetBrains Mono&quot;, monospace;
+                  font-size: 0.6rem;
+                  color: rgba(255, 255, 255, 0.2);
+                  margin-left: 0.5rem;
+                "
+                >preview</span
+              >
+              <div
+                style="
+                  margin-left: auto;
+                  display: flex;
+                  gap: 0.4rem;
+                  align-items: center;
+                "
+              >
+                <span
+                  id="preview-mode-label"
+                  style="
+                    font-family: &quot;JetBrains Mono&quot;, monospace;
+                    font-size: 0.55rem;
+                    color: rgba(255, 255, 255, 0.2);
+                  "
+                  >desktop</span
+                >
+                <button
+                  id="toggle-preview-mode"
+                  style="
+                    font-family: &quot;JetBrains Mono&quot;, monospace;
+                    font-size: 0.55rem;
+                    padding: 0.2rem 0.5rem;
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border-radius: 4px;
+                    color: rgba(255, 255, 255, 0.4);
+                    background: transparent;
+                    cursor: none;
+                  "
+                >
+                  📱
+                </button>
+              </div>
+            </div>
+            <div
+              id="preview-pane-wrapper"
+              style="
+                height: 360px;
+                background: white;
+                overflow: auto;
+                transition: all 0.4s ease;
+              "
+            >
+              <iframe
+                id="preview-frame"
+                style="width: 100%; height: 100%; border: none"
+                title="Live preview"
+                sandbox="allow-scripts allow-same-origin"
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--
+       CINEMATIC STORY SECTION
+  -->
+    <section id="story" aria-label="The Memory Snap Story">
+      <div
+        class="story-section"
+        style="
+          background: linear-gradient(
+            135deg,
+            var(--c-black) 0%,
+            var(--c-deep) 50%,
+            var(--c-navy) 100%
+          );
+        "
+      >
+        <div
+          class="hex-grid"
+          style="position: absolute; inset: 0; z-index: 0"
+        ></div>
+        <div
+          style="
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+          "
+          class="flex-col-mobile"
+        >
+          <div class="reveal-left">
+            <div class="section-label" style="margin-bottom: 1rem">
+              ORIGIN
+            </div>
+            <h2
+              style="
+                font-family: &quot;Orbitron&quot;, monospace;
+                font-size: clamp(2rem, 5vw, 3.5rem);
+                font-weight: 900;
+                line-height: 1.1;
+                margin-bottom: 1.5rem;
+              "
+            >
+              The Memory<br /><span class="text-neon-cyan">Palace</span
+              ><br />Theory
+            </h2>
+            <p
+              style="
+                color: rgba(232, 244, 255, 0.65);
+                line-height: 1.8;
+                font-size: 1rem;
+                margin-bottom: 1.5rem;
+              "
+            >
+              Ancient Greek orators memorized entire speeches by placing ideas
+              in imaginary rooms. We do the same — but for web components.
+            </p>
+            <p
+              style="
+                color: rgba(232, 244, 255, 0.45);
+                line-height: 1.8;
+                font-size: 0.9rem;
+              "
+            >
+              Every card, every gradient, every shadow lives in your palace. You
+              don't look up how to build it. You
+              <em style="color: var(--c-cyan)">remember</em>.
+            </p>
+          </div>
+          <div
+            class="reveal-right"
+            style="display: flex; flex-direction: column; gap: 1rem"
+          >
+            <div
+              class="glass-card float-element"
+              style="
+                padding: 1.25rem;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+              "
+            >
+              <div style="font-size: 2rem">🧠</div>
+              <div>
+                <div
+                  style="
+                    font-family: &quot;Orbitron&quot;, monospace;
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                  "
+                  class="text-neon-cyan"
+                >
+                  2.5s
+                </div>
+                <div
+                  style="
+                    font-family: &quot;JetBrains Mono&quot;, monospace;
+                    font-size: 0.65rem;
+                    color: rgba(232, 244, 255, 0.4);
+                    letter-spacing: 0.1em;
+                  "
+                >
+                  AVG RECALL TIME
+                </div>
+              </div>
+            </div>
+            <div
+              class="glass-card float-element"
+              style="
+                padding: 1.25rem;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                margin-left: 2rem;
+              "
+            >
+              <div style="font-size: 2rem">⚡</div>
+              <div>
+                <div
+                  style="
+                    font-family: &quot;Orbitron&quot;, monospace;
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                  "
+                  class="text-neon-magenta"
+                >
+                  10x
+                </div>
+                <div
+                  style="
+                    font-family: &quot;JetBrains Mono&quot;, monospace;
+                    font-size: 0.65rem;
+                    color: rgba(232, 244, 255, 0.4);
+                    letter-spacing: 0.1em;
+                  "
+                >
+                  FASTER BUILDS
+                </div>
+              </div>
+            </div>
+            <div
+              class="glass-card float-element"
+              style="
+                padding: 1.25rem;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+              "
+            >
+              <div style="font-size: 2rem">✦</div>
+              <div>
+                <div
+                  style="
+                    font-family: &quot;Orbitron&quot;, monospace;
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                  "
+                  class="text-neon-violet"
+                >
+                  100%
+                </div>
+                <div
+                  style="
+                    font-family: &quot;JetBrains Mono&quot;, monospace;
+                    font-size: 0.65rem;
+                    color: rgba(232, 244, 255, 0.4);
+                    letter-spacing: 0.1em;
+                  "
+                >
+                  SNAP ACCURACY
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        style="
+          height: 100px;
+          background: linear-gradient(
+            135deg,
+            var(--c-navy) 49%,
+            var(--c-deep) 51%
+          );
+          position: relative;
+          z-index: 1;
+        "
+      ></div>
+
+      <div class="story-section" style="background: var(--c-deep)">
+        <div
+          style="
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+              ellipse at 30% 50%,
+              rgba(255, 0, 170, 0.08),
+              transparent 60%
+            );
+            z-index: 0;
+          "
+        ></div>
+        <div
+          style="
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+          "
+        >
+          <div class="reveal" style="margin-bottom: 3rem">
+            <div class="section-label" style="margin-bottom: 1rem">
+              // THE WORKFLOW
+            </div>
+            <h2
+              style="
+                font-family: &quot;Orbitron&quot;, monospace;
+                font-size: clamp(2rem, 5vw, 3.5rem);
+                font-weight: 900;
+              "
+            >
+              Three Steps.<br /><span class="text-gradient-snap"
+                >Infinite Designs.</span
+              >
+            </h2>
+          </div>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+              gap: 2rem;
+            "
+          >
+            <div
+              class="glass-card reveal"
+              style="padding: 2rem; text-align: center; animation-delay: 0.1s"
+            >
+              <div
+                style="
+                  width: 60px;
+                  height: 60px;
+                  border-radius: 16px;
+                  background: linear-gradient(
+                    135deg,
+                    rgba(0, 245, 255, 0.2),
+                    rgba(0, 245, 255, 0.05)
+                  );
+                  border: 1px solid rgba(0, 245, 255, 0.2);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-size: 1.75rem;
+                  margin: 0 auto 1.25rem;
+                "
+              >
+                👁️
+              </div>
+              <div
+                style="
+                  font-family: &quot;Orbitron&quot;, monospace;
+                  font-size: 0.6rem;
+                  font-weight: 700;
+                  color: #00f5ff;
+                  letter-spacing: 0.2em;
+                  margin-bottom: 0.5rem;
+                "
+              >
+                01 · OBSERVE
+              </div>
+              <h3
+                style="
+                  font-family: &quot;Orbitron&quot;, monospace;
+                  font-size: 1.1rem;
+                  margin-bottom: 0.75rem;
+                "
+              >
+                See It Once
+              </h3>
+              <p
+                style="
+                  color: rgba(232, 244, 255, 0.5);
+                  font-size: 0.85rem;
+                  line-height: 1.6;
+                "
+              >
+                Study a design for 10 seconds. The Memory Palace algorithm locks
+                it into your visual cortex.
+              </p>
+            </div>
+            <div
+              class="glass-card reveal"
+              style="padding: 2rem; text-align: center; animation-delay: 0.25s"
+            >
+              <div
+                style="
+                  width: 60px;
+                  height: 60px;
+                  border-radius: 16px;
+                  background: linear-gradient(
+                    135deg,
+                    rgba(255, 0, 170, 0.2),
+                    rgba(255, 0, 170, 0.05)
+                  );
+                  border: 1px solid rgba(255, 0, 170, 0.2);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-size: 1.75rem;
+                  margin: 0 auto 1.25rem;
+                "
+              >
+                🧠
+              </div>
+              <div
+                style="
+                  font-family: &quot;Orbitron&quot;, monospace;
+                  font-size: 0.6rem;
+                  font-weight: 700;
+                  color: #ff00aa;
+                  letter-spacing: 0.2em;
+                  margin-bottom: 0.5rem;
+                "
+              >
+                02 · RECALL
+              </div>
+              <h3
+                style="
+                  font-family: &quot;Orbitron&quot;, monospace;
+                  font-size: 1.1rem;
+                  margin-bottom: 0.75rem;
+                "
+              >
+                Walk the Palace
+              </h3>
+              <p
+                style="
+                  color: rgba(232, 244, 255, 0.5);
+                  font-size: 0.85rem;
+                  line-height: 1.6;
+                "
+              >
+                Reconstruct from memory. Every hover state, every breakpoint,
+                every micro-interaction.
+              </p>
+            </div>
+            <div
+              class="glass-card reveal"
+              style="padding: 2rem; text-align: center; animation-delay: 0.4s"
+            >
+              <div
+                style="
+                  width: 60px;
+                  height: 60px;
+                  border-radius: 16px;
+                  background: linear-gradient(
+                    135deg,
+                    rgba(168, 85, 247, 0.2),
+                    rgba(168, 85, 247, 0.05)
+                  );
+                  border: 1px solid rgba(168, 85, 247, 0.2);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-size: 1.75rem;
+                  margin: 0 auto 1.25rem;
+                "
+              >
+                ⚡
+              </div>
+              <div
+                style="
+                  font-family: &quot;Orbitron&quot;, monospace;
+                  font-size: 0.6rem;
+                  font-weight: 700;
+                  color: #a855f7;
+                  letter-spacing: 0.2em;
+                  margin-bottom: 0.5rem;
+                "
+              >
+                03 · SNAP
+              </div>
+              <h3
+                style="
+                  font-family: &quot;Orbitron&quot;, monospace;
+                  font-size: 1.1rem;
+                  margin-bottom: 0.75rem;
+                "
+              >
+                Ship Perfect Code
+              </h3>
+              <p
+                style="
+                  color: rgba(232, 244, 255, 0.5);
+                  font-size: 0.85rem;
+                  line-height: 1.6;
+                "
+              >
+                95%+ accuracy? PERFECT SNAP. Your syntax is clean, your design
+                is pixel-perfect.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="story-clip"
+        style="
+          background: linear-gradient(135deg, var(--c-navy), var(--c-black));
+        "
+      >
+        <div
+          style="
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            text-align: center;
+          "
+        >
+          <div class="reveal">
+            <blockquote
+              style="
+                font-family: &quot;Orbitron&quot;, monospace;
+                font-size: clamp(1.2rem, 3.5vw, 2rem);
+                font-weight: 700;
+                line-height: 1.4;
+                color: rgba(232, 244, 255, 0.9);
+                font-style: italic;
+              "
+            >
+              "Don't just code what you see.<br />
+              <span class="text-gradient-cyber">Rebuild what you remember.</span
+              >"
+            </blockquote>
+            <div
+              style="
+                margin-top: 1.5rem;
+                font-family: &quot;JetBrains Mono&quot;, monospace;
+                font-size: 0.65rem;
+                color: rgba(232, 244, 255, 0.25);
+                letter-spacing: 0.3em;
+              "
+            >
+              — SNAP SYNTAX 3.0 · SRIJAN 2026
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--
+       FINAL CTA + DEPLOYMENT
+  -->
+    <section id="final-cta" aria-label="Get Started and Deploy">
+      <div
+        style="
+          position: absolute;
+          inset: 0;
+          background:
+            radial-gradient(
+              ellipse at 50% 0%,
+              rgba(0, 245, 255, 0.06),
+              transparent 60%
+            ),
+            radial-gradient(
+              ellipse at 80% 100%,
+              rgba(255, 0, 170, 0.06),
+              transparent 50%
+            );
+          z-index: 0;
+        "
+        aria-hidden="true"
+      ></div>
+
+      <div
+        style="max-width: 900px; margin: 0 auto; position: relative; z-index: 1"
+      >
+        <div class="reveal" style="margin-bottom: 4rem">
+          <div class="section-label" style="margin-bottom: 1rem">
+            DEPLOY
+          </div>
+          <h2
+            style="
+              font-family: &quot;Orbitron&quot;, monospace;
+              font-size: clamp(2rem, 6vw, 4rem);
+              font-weight: 900;
+              line-height: 1.1;
+              margin-bottom: 1.5rem;
+            "
+          >
+            Start Your<br /><span class="text-gradient-cyber"
+              >Memory Palace</span
+            >
+          </h2>
+          <p
+            style="
+              color: rgba(232, 244, 255, 0.5);
+              font-size: 1.05rem;
+              line-height: 1.7;
+              max-width: 520px;
+              margin-inline: auto;
+            "
+          >
+            One command. Instant memory palace. Ship in under 5 minutes.
+          </p>
+        </div>
+
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 3rem;
+          "
+          class="reveal"
+          style="animation-delay: 0.2s"
+        >
+          <div
+            class="deploy-step"
+            onclick="
+              copyDeployStep(
+                this,
+                'git clone https://github.com/your-team/snap-syntax-3.git',
+              )
+            "
+          >
+            <div class="step-num">1</div>
+            <div style="flex: 1">
+              <div
+                style="
+                  font-family: &quot;JetBrains Mono&quot;, monospace;
+                  font-size: 0.7rem;
+                  color: rgba(232, 244, 255, 0.35);
+                  letter-spacing: 0.1em;
+                  margin-bottom: 0.25rem;
+                "
+              >
+                CLONE THE REPOSITORY
+              </div>
+              <code
+                style="
+                  font-family: &quot;JetBrains Mono&quot;, monospace;
+                  font-size: 0.85rem;
+                  color: #00f5ff;
+                "
+                >git clone https://github.com/your-team/snap-syntax-3.git</code
+              >
+            </div>
+            <div
+              class="tooltip"
+              data-tip="Click to copy"
+              style="
+                font-size: 0.9rem;
+                opacity: 0.4;
+                transition: opacity 0.2s ease;
+              "
+            >
+              📋
+            </div>
+          </div>
+
+          <div
+            class="deploy-step"
+            onclick="copyDeployStep(this, 'cd snap-syntax-3 && npm install')"
+          >
+            <div class="step-num">2</div>
+            <div style="flex: 1">
+              <div
+                style="
+                  font-family: &quot;JetBrains Mono&quot;, monospace;
+                  font-size: 0.7rem;
+                  color: rgba(232, 244, 255, 0.35);
+                  letter-spacing: 0.1em;
+                  margin-bottom: 0.25rem;
+                "
+              >
+                INSTALL DEPENDENCIES
+              </div>
+              <code
+                style="
+                  font-family: &quot;JetBrains Mono&quot;, monospace;
+                  font-size: 0.85rem;
+                  color: #00f5ff;
+                "
+                >cd snap-syntax-3 && npm install</code
+              >
+            </div>
+            <div
+              class="tooltip"
+              data-tip="Click to copy"
+              style="
+                font-size: 0.9rem;
+                opacity: 0.4;
+                transition: opacity 0.2s ease;
+              "
+            >
+              📋
+            </div>
+          </div>
+
+          <div
+            class="deploy-step"
+            onclick="copyDeployStep(this, 'npm run dev')"
+          >
+            <div class="step-num">3</div>
+            <div style="flex: 1">
+              <div
+                style="
+                  font-family: &quot;JetBrains Mono&quot;, monospace;
+                  font-size: 0.7rem;
+                  color: rgba(232, 244, 255, 0.35);
+                  letter-spacing: 0.1em;
+                  margin-bottom: 0.25rem;
+                "
+              >
+                LAUNCH DEV SERVER
+              </div>
+              <code
+                style="
+                  font-family: &quot;JetBrains Mono&quot;, monospace;
+                  font-size: 0.85rem;
+                  color: #00f5ff;
+                "
+                >npm run dev</code
+              >
+              <div
+                style="
+                  font-family: &quot;JetBrains Mono&quot;, monospace;
+                  font-size: 0.6rem;
+                  color: #00ff88;
+                  margin-top: 0.25rem;
+                "
+              >
+                → http://localhost:5173 ✓
+              </div>
+            </div>
+            <div
+              class="tooltip"
+              data-tip="Click to copy"
+              style="
+                font-size: 0.9rem;
+                opacity: 0.4;
+                transition: opacity 0.2s ease;
+              "
+            >
+              📋
+            </div>
+          </div>
+
+          <div
+            class="deploy-step"
+            onclick="copyDeployStep(this, 'npm run build && npx serve dist')"
+          >
+            <div class="step-num">4</div>
+            <div style="flex: 1">
+              <div
+                style="
+                  font-family: &quot;JetBrains Mono&quot;, monospace;
+                  font-size: 0.7rem;
+                  color: rgba(232, 244, 255, 0.35);
+                  letter-spacing: 0.1em;
+                  margin-bottom: 0.25rem;
+                "
+              >
+                BUILD FOR PRODUCTION
+              </div>
+              <code
+                style="
+                  font-family: &quot;JetBrains Mono&quot;, monospace;
+                  font-size: 0.85rem;
+                  color: #00f5ff;
+                "
+                >npm run build && npx serve dist</code
+              >
+            </div>
+            <div
+              class="tooltip"
+              data-tip="Click to copy"
+              style="
+                font-size: 0.9rem;
+                opacity: 0.4;
+                transition: opacity 0.2s ease;
+              "
+            >
+              📋
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="flex flex-wrap justify-center gap-3 mb-8 reveal"
+          style="animation-delay: 0.4s"
+        >
+          <span
+            class="tag-cyber"
+            style="font-size: 0.7rem; padding: 0.4rem 1rem"
+            >Tailwind v4</span
+          >
+          <span
+            class="tag-cyber"
+            style="
+              font-size: 0.7rem;
+              padding: 0.4rem 1rem;
+              background: rgba(255, 0, 170, 0.1);
+              color: #ff00aa;
+              border-color: rgba(255, 0, 170, 0.25);
+            "
+            >PostCSS</span
+          >
+          <span
+            class="tag-cyber"
+            style="
+              font-size: 0.7rem;
+              padding: 0.4rem 1rem;
+              background: rgba(168, 85, 247, 0.1);
+              color: #a855f7;
+              border-color: rgba(168, 85, 247, 0.25);
+            "
+            >Vite 5</span
+          >
+          <span
+            class="tag-cyber"
+            style="
+              font-size: 0.7rem;
+              padding: 0.4rem 1rem;
+              background: rgba(0, 255, 136, 0.1);
+              color: #00ff88;
+              border-color: rgba(0, 255, 136, 0.25);
+            "
+            >Autoprefixer</span
+          >
+          <span
+            class="tag-cyber"
+            style="
+              font-size: 0.7rem;
+              padding: 0.4rem 1rem;
+              background: rgba(255, 170, 0, 0.1);
+              color: #ffaa00;
+              border-color: rgba(255, 170, 0, 0.25);
+            "
+            >Vanilla JS</span
+          >
+        </div>
+
+        <div
+          class="flex flex-col sm:flex-row gap-4 justify-center reveal"
+          style="animation-delay: 0.5s"
+        >
+          <button class="btn-cta" id="final-snap-btn" aria-label="Final Snap">
+            <span>⚡ PERFECT SNAP</span>
+          </button>
+          <button
+            class="btn-ghost"
+            onclick="triggerMatrixEasterEgg()"
+            style="border-color: #00ff88; color: #00ff88"
+          >
+            🎮 Find the Easter Egg
+          </button>
+        </div>
+
+        <div class="konami-hint" style="margin-top: 3rem">
+          ↑ ↑ ↓ ↓ ← → ← → B A · triple-click the logo
+        </div>
+      </div>
+    </section>
+
+    <!--
+       FOOTER
+  -->
+    <footer
+      style="
+        padding: 3rem 2rem;
+        border-top: 1px solid rgba(0, 245, 255, 0.08);
+        text-align: center;
+      "
+    >
+      <div style="max-width: 800px; margin: 0 auto">
+        <div
+          style="
+            font-family: &quot;Orbitron&quot;, monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+          "
+          class="text-gradient-cyber"
+        >
+          MEMORY SNAP · SNAP SYNTAX 3.0
+        </div>
+        <div
+          style="
+            font-family: &quot;JetBrains Mono&quot;, monospace;
+            font-size: 0.6rem;
+            color: rgba(232, 244, 255, 0.2);
+            letter-spacing: 0.2em;
+            margin-bottom: 1.5rem;
+          "
+        >
+          SRIJAN 2026 · JADAVPUR UNIVERSITY · TEAM SNAP
+        </div>
+        <hr
+          class="neon-divider"
+          style="margin-bottom: 1.5rem"
+          aria-hidden="true"
+        />
+        <div
+          style="
+            font-family: &quot;JetBrains Mono&quot;, monospace;
+            font-size: 0.6rem;
+            color: rgba(232, 244, 255, 0.15);
+            letter-spacing: 0.1em;
+          "
+        >
+          Built with Tailwind CSS v4 · PostCSS · Vite · Pure JS · No libraries.
+          All love.
+        </div>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/js/main.js"></script>
+  </body>
+</html>
